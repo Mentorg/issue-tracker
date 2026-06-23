@@ -1,11 +1,15 @@
 <?php
 
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\SessionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::post('/login', [SessionController::class, 'store'])->name('login');
+Route::post('/logout', [SessionController::class, 'destroy'])->name('logout');
 
 Route::controller(ProjectController::class)->group(function() {
     Route::get('/projects', 'index')->name('projects.index');
