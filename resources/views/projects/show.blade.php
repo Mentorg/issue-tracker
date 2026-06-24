@@ -11,4 +11,12 @@
         </div>
     </div>
     <p class="mt-4">{{ $project->description }}</p>
+    <div class="grid grid-cols-4 gap-4 mt-8">
+        @foreach ($project->issues as $issue)
+            <div class="border border-slate-300 py-4 px-2 rounded-md">
+                <a href="{{ route('issues.show', $issue) }}" class="text-lg font-semibold line-clamp-1 transition-all hover:text-slate-600 hover:cursor-pointer">{{  $issue->title }}</a>
+                <p class="text-sm mt-2 line-clamp-2">{{ $issue->description }}</p>
+            </div>
+        @endforeach
+    </div>
 @endsection

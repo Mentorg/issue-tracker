@@ -11,5 +11,8 @@ class Project extends Model
 
     protected $fillable = ['name', 'description'];
 
-
+    public function issues()
+    {
+        return $this->hasMany(Issue::class);
+    }
 }

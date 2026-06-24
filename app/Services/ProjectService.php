@@ -8,12 +8,12 @@ class ProjectService
 {
     public function getProjects()
     {
-        return Project::orderBy('created_at', 'desc')->paginate(15);
+        return Project::with('issues')->orderBy('created_at', 'desc')->paginate(15);
     }
 
     public function getProject($project)
     {
-        return $project;
+        return $project->load('issues');
     }
 
     public function create(array $validated)

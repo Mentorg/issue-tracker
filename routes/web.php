@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\IssueController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SessionController;
 use Illuminate\Support\Facades\Route;
@@ -20,3 +21,5 @@ Route::controller(ProjectController::class)->group(function() {
     Route::PUT('/projects/{project}', 'update')->name('projects.update');
     Route::delete('projects/{project}', 'destroy')->name('projects.delete');
 });
+
+Route::resource('issues', IssueController::class);
