@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('comments', function (Blueprint $table) {
-            $table->id();
-            $table->string('author_name');
-            $table->text('body');
-            $table->foreignId('issue_id')->constrained()->cascadeOnDelete();
-            $table->timestamps();
+        Schema::table('projects', function (Blueprint $table) {
+            $table->date('start_date')->nullable()->after('description');
+            $table->date('deadline')->nullable()->after('start_date');
         });
     }
 
@@ -25,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('comments');
+        Schema::table('projects', function (Blueprint $table) {
+            $table->dropColumn(['start_date', 'deadline']);
+        });
     }
 };

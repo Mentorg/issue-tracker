@@ -19,6 +19,23 @@
             </form>
         </div>
     </div>
+    <div>
+        <ul id="users-list" class="flex gap-2 mt-4">
+            @foreach ($issue->users as $user)
+            <li class="bg-gray-300 px-3 py-1 rounded flex items-center gap-2">
+                {{ $user->name }}
+                <button class="detach-user transition-all rounded-full w-6 h-6 flex items-center justify-center hover:bg-slate-400 hover:cursor-pointer" data-user-id="{{ $user->id }}">×</button>
+            </li>
+            @endforeach
+        </ul>
+        <select id="user-select" class="border border-slate-300 rounded-sm py-1.5 px-2.5 mt-1.5">
+            @foreach ($users as $user)
+                <option value="{{ $user->id }}">{{ $user->name }}</option>
+            @endforeach
+        </select>
+
+        <button id="attach-user-btn" class="bg-blue-600 py-2 px-4 text-white rounded-md transition-all hover:bg-blue-500 hover:cursor-pointer">Assign</button>
+    </div>
     <p class="mt-4">{{ $issue->description }}</p>
     <div class="mt-4">
         <h2><span class="font-semibold">Project:</span> <a href="{{ route('projects.show', $issue->project) }}" class="text-sm text-blue-600 transition-all hover:text-blue-500">{{ $issue->project->name }}</a></h2>
@@ -177,6 +194,47 @@
             .then(html => {
                 document.getElementById('comments-container').innerHTML = html;
             });
+        });
+        document.getElementById('attach-user-btn').addEventListener('click', async () => {
+            const userId = document.getElementById('user-select').value;
+
+            const res = await fetch(`/issues/{{ $issue->id }}/users`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                },
+                body: JSON.stringify({ user_id: userId })
+            });
+
+            if (!res.ok) return;
+
+            const user = await res.json();
+
+            const li = document.createElement('li');
+            li.className = "bg-gray-300 px-3 py-1 rounded flex items-center gap-2";
+            li.innerHTML = `
+                ${user.name}
+                <button class="detach-user" data-user-id="${user.id}">×</button>
+            `;
+
+            document.getElementById('users-list').appendChild(li);
+        });
+        document.getElementById('users-list').addEventListener('click', async (e) => {
+            if (!e.target.classList.contains('detach-user')) return;
+
+            const userId = e.target.dataset.userId;
+
+            const res = await fetch(`/issues/{{ $issue->id }}/users/${userId}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                }
+            });
+
+            if (res.ok) {
+                e.target.closest('li').remove();
+            }
         });
     });
     </script>

@@ -1,58 +1,185 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📌 Issue Tracker
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A lightweight issue tracking system built with Laravel. It allows users to manage projects, issues, tags, comments, and user assignments with a clean AJAX-powered interface.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## ✨ Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 🗂 Projects
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+* Create, update, and delete projects
+* Projects include: name, description, start date, and deadline
+* Each project belongs to a user (author)
+* Authorization handled via Laravel policies
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 📝 Issues
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+* Create and manage issues within projects
+* Fields: title, description, status, priority, due date
+* Each issue belongs to a project
+* Supports:
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+  * 💬 Comments
+  * 🏷 Tags (many-to-many)
+  * 👥 User assignments (many-to-many via pivot table)
 
-## Agentic Development
+---
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### 🏷 Tags
+
+* Create and manage tags
+* Attach/detach tags to issues via AJAX (no page reload)
+* Color-coded tags for better visualization
+
+---
+
+### 💬 Comments
+
+* Add comments to issues
+* Paginated comment loading via AJAX
+* Real-time comment creation without page reload
+
+---
+
+### 👥 User Assignment
+
+* Assign multiple users to an issue
+* Attach/detach users dynamically via AJAX
+* UI updates instantly without refresh
+
+---
+
+### 🔐 Authentication & Authorization
+
+* Login/logout system
+* Auth middleware protects all routes
+* Policies ensure only authorized users can modify resources
+
+---
+
+## ⚙️ Tech Stack
+
+* Laravel
+* MySQL
+* Blade templates
+* JavaScript (Fetch API for AJAX)
+* Tailwind CSS
+
+---
+
+## ⚙️ Requirements
+
+* PHP 8+
+* Composer
+* Node.js & npm
+* MySQL (ensure it is running locally via DBngin, XAMPP, or native MySQL)
+
+---
+
+## 🚀 Setup Instructions
+
+### 1. Clone the repository
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/Mentorg/issue-tracker.git
+cd issue-tracker
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+### 2. Install dependencies
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+composer install
+npm install
+```
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 3. Environment setup
 
-## Security Vulnerabilities
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Configure your database in `.env`:
 
-## License
+```env
+DB_DATABASE=your_db
+DB_USERNAME=your_user
+DB_PASSWORD=your_password
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+### 4. Start MySQL
+
+Ensure your MySQL server is running (DBngin, XAMPP, or native MySQL).
+
+---
+
+### 5. Run migrations and seeders
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+---
+
+### 6. Start frontend assets
+
+```bash
+npm run dev
+```
+
+---
+
+### 7. Start Laravel server
+
+```bash
+php artisan serve
+```
+
+---
+
+## 🌐 Access the application
+
+Default:
+```
+http://127.0.0.1:8000
+```
+or:
+```
+http://project-name.test
+```
+---
+
+## 👤 Default Login (if seeded)
+
+```
+Email: test@example.com
+Password: password
+```
+
+---
+
+## 🧠 Architecture Notes
+
+* Service layer used for issue loading logic
+* Form Requests handle validation
+* Policies enforce authorization rules
+* Many-to-many relationships:
+
+  * issues ↔ tags
+  * issues ↔ users
+* AJAX used for:
+
+  * tag attach/detach
+  * user assignment
+  * comment creation
+  * comment pagination
+* Eager loading used to prevent N+1 query issues

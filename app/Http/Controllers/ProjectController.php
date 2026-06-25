@@ -6,9 +6,12 @@ use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
 use App\Services\ProjectService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ProjectController extends Controller
 {
+    use AuthorizesRequests;
+
     protected $projectService;
 
     public function __construct(ProjectService $projectService)
@@ -45,6 +48,8 @@ class ProjectController extends Controller
 
     public function update(UpdateProjectRequest $request, Project $project)
     {
+        $this->authorize('update', $project);
+
         $this->projectService->update($request->validated(), $project);
 
         return redirect()->route('projects.index');
@@ -52,6 +57,8 @@ class ProjectController extends Controller
 
     public function destroy(Project $project)
     {
+        $this->authorize('delete', $project);
+
         $this->projectService->delete($project);
 
         return redirect()->route('projects.index');

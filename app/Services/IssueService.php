@@ -9,7 +9,7 @@ class IssueService
     public function getIssues($request)
     {
         return Issue::query()
-            ->with(['project'])
+            ->with(['project', 'users', 'tags'])
             ->when($request->status, function ($query, $status) {
                 $query->where('status', $status);
             })
@@ -31,9 +31,8 @@ class IssueService
     {
         return $issue->load([
             'project',
-            'comments' => function ($query) {
-                $query->latest();
-            }
+            'comments' => fn ($q) => $q->latest(),
+            'users',
         ]);
     }
 

@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,6 +21,9 @@ class ProjectFactory extends Factory
         return [
             'name' => fake()->sentence(),
             'description' => fake()->paragraph(),
+            'start_date' => fake()->dateTimeBetween('-1 month', 'now'),
+            'deadline' => fake()->dateTimeBetween('now', '+3 months'),
+            'user_id' => User::factory(),
         ];
     }
 }

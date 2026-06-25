@@ -13,13 +13,12 @@ return new class extends Migration
     {
         Schema::create('issues', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('project_id');
             $table->string('title');
             $table->text('description');
             $table->enum('status', ['open', 'in_progress', 'closed']);
             $table->enum('priority', ['low', 'medium', 'high']);
             $table->dateTime('due_date', )->nullable();
-            $table->foreign('project_id')->references('id')->on('projects');
+            $table->foreignId('project_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }
