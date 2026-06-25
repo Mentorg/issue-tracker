@@ -44,26 +44,33 @@
             @endif
         </header>
         <div class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">
-            <form action="{{ route('login') }}" method="POST" class="flex flex-col gap-4">
-                @csrf
-                <div class="flex flex-col">
-                    <label for="email">Email</label>
-                    <input type="email" name="email" id="email" class="border border-slate-300 rounded-sm py-1.5 px-2.5 mt-1.5">
-                    @error('email')
-                        <p class="text-red-500 text-sm">{{ $message }}</p>
-                    @enderror
+            <div class="flex flex-col">
+                <div class="mb-4 p-3 border rounded bg-gray-50 text-sm">
+                    <p class="font-semibold">Demo credentials</p>
+                    <p>Email: johndoe@mail.com</p>
+                    <p>Password: johndoe</p>
                 </div>
-                <div class="flex flex-col">
-                    <label for="password">Password</label>
-                    <input type="password" name="password" id="password" class="border border-slate-300 rounded-sm py-1.5 px-2.5 mt-1.5">
-                    @error('password')
-                        <p class="text-red-500 text-sm">{{ $message }}</p>
-                    @enderror
-                </div>
-                <div class="flex justify-center">
-                    <button type="submit" class="bg-blue-600 py-2 px-6 text-white rounded-md w-fit hover:bg-blue-500 hover:cursor-pointer">Login</button>
-                </div>
-            </form>
+                <form action="{{ route('login.submit') }}" method="POST" class="flex flex-col gap-4">
+                    @csrf
+                    <div class="flex flex-col">
+                        <label for="email">Email</label>
+                        <input type="email" name="email" id="email" class="border border-slate-300 rounded-sm py-1.5 px-2.5 mt-1.5">
+                        @error('email')
+                            <p class="text-red-500 text-sm">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="password">Password</label>
+                        <input type="password" name="password" id="password" class="border border-slate-300 rounded-sm py-1.5 px-2.5 mt-1.5">
+                        @error('password')
+                            <p class="text-red-500 text-sm">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div class="flex justify-center">
+                        <button type="submit" class="bg-blue-600 py-2 px-6 text-white rounded-md w-fit hover:bg-blue-500 hover:cursor-pointer">Login</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </body>
 </html>
