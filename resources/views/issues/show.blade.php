@@ -39,6 +39,24 @@
         </select>
         <button id="attach-tag-btn" class="bg-blue-600 text-white px-4 py-1 rounded transition-all hover:bg-blue-500 hover:cursor-pointer">Attach Tag</button>
     </div>
+    <div class="w-1/2 mt-10">
+    <h3 class="font-semibold mb-4">Comments</h3>
+        <ul id="comments-container" class="flex flex-col gap-4"></ul>
+        <form id="comment-form" class="mt-6 flex flex-col gap-3">
+            @csrf
+            <textarea
+                name="body"
+                placeholder="Write a comment..."
+                class="border rounded px-3 py-2"
+            ></textarea>
+            <button
+                type="submit"
+                class="bg-blue-600 text-white px-4 py-2 rounded w-fit transition-all hover:bg-blue-500 hover:cursor-pointer"
+            >
+                Add Comment
+            </button>
+        </form>
+    </div>
     <script>
         document.getElementById('attach-tag-btn')
             .addEventListener('click', async function () {
@@ -95,5 +113,71 @@
                 e.target.closest('li').remove();
             }
         });
+        document.addEventListener('DOMContentLoaded', function () {
+
+        const container = document.getElementById('comments-container');
+        const form = document.getElementById('comment-form');
+
+        function loadComments(page = 1) {
+            fetch(`/issues/{{ $issue->id }}/comments?page=${page}`, {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(res => res.text())
+            .then(html => {
+                container.innerHTML = html;
+            });
+        }
+
+        loadComments();
+
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+
+            const response = await fetch(`/issues/{{ $issue->id }}/comments`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                },
+                body: formData
+            });
+
+            if (!response.ok) return;
+
+            const comment = await response.json();
+
+            const empty = document.getElementById('no-comments');
+            if (empty) empty.remove();
+
+            const li = document.createElement('li');
+            li.className = "bg-slate-200 py-4 px-10 rounded-md w-fit";
+
+            li.innerHTML = `
+                <h3 class="font-semibold">${comment.author_name}</h3>
+                <p class="text-sm italic mt-4">${comment.body}</p>
+                <small class="text-gray-500">${comment.created_at}</small>
+            `;
+
+            container.prepend(li);
+
+            form.reset();
+        });
+
+        document.addEventListener('click', function (e) {
+            const link = e.target.closest('.pagination a');
+            if (!link) return;
+
+            e.preventDefault();
+
+            fetch(link.href, {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById('comments-container').innerHTML = html;
+            });
+        });
+    });
     </script>
 @endsection

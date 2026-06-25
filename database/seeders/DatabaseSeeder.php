@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             ProjectSeeder::class,
             TagSeeder::class,
             IssueSeeder::class,
+            CommentSeeder::class,
         ]);
     }
 }

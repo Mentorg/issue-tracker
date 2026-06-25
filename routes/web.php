@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\IssueController;
 use App\Http\Controllers\IssueTagController;
 use App\Http\Controllers\ProjectController;
@@ -33,4 +34,7 @@ Route::middleware('auth')->group(function() {
     Route::get('/tags', [TagController::class, 'index'])->name('tags.index');
     Route::get('/tags/create', [TagController::class, 'create'])->name('tags.create');
     Route::post('/tags', [TagController::class, 'store'])->name('tags.store');
+
+    Route::get('/issues/{issue}/comments', [CommentController::class, 'index'])->name('comments.index');
+    Route::post('/issues/{issue}/comments', [CommentController::class, 'store'])->name('comments.store');
 });

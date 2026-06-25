@@ -29,7 +29,12 @@ class IssueService
 
     public function getIssue($issue)
     {
-        return $issue->load('project');
+        return $issue->load([
+            'project',
+            'comments' => function ($query) {
+                $query->latest();
+            }
+        ]);
     }
 
     public function create(array $validated)
