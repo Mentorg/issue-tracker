@@ -6,6 +6,7 @@ use App\Http\Requests\StoreIssueRequest;
 use App\Http\Requests\UpdateIssueRequest;
 use App\Models\Issue;
 use App\Models\Project;
+use App\Models\Tag;
 use App\Services\IssueService;
 use Illuminate\Http\Request;
 
@@ -42,7 +43,10 @@ class IssueController extends Controller
 
     public function show(Issue $issue)
     {
-        return view('issues.show', ['issue' => $this->issueService->getIssue($issue)]);
+        return view('issues.show', [
+            'issue' => $this->issueService->getIssue($issue),
+            'tags' => Tag::orderBy('name')->get(),
+        ]);
     }
 
     public function edit(Issue $issue)

@@ -15,4 +15,9 @@ class Issue extends Model
     {
         return $this->belongsTo(Project::class);
     }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
 }

@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\IssueController;
+use App\Http\Controllers\IssueTagController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SessionController;
+use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -23,3 +25,9 @@ Route::controller(ProjectController::class)->group(function() {
 });
 
 Route::resource('issues', IssueController::class);
+Route::post('/issues/{issue}/tags', [IssueTagController::class, 'store'])->name('issues.tags.store');
+Route::delete('/issues/{issue}/tags/{tag}', [IssueTagController::class, 'destroy'])->name('issues.tags.destroy');
+
+Route::get('/tags', [TagController::class, 'index'])->name('tags.index');
+Route::get('/tags/create', [TagController::class, 'create'])->name('tags.create');
+Route::post('/tags', [TagController::class, 'store'])->name('tags.store');
